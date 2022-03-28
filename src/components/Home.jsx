@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom"
+
 function Home() {
 	return (
 		<div>
@@ -5,7 +7,7 @@ function Home() {
 			<br />
 			<div>forum for web3</div>
 			<br />
-			<button>Enter app</button>
+			<Link to='/spaces'>Go to app</Link>
 		</div>
 	)
 }
