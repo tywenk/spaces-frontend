@@ -12,7 +12,7 @@ function Navbar() {
 	}, [])
 
 	return (
-		<nav className='flex flex-col justify-between h-screen bg-slate-200 rounded-2xl p-4 w-1/6'>
+		<nav className='flex flex-col justify-between h-screen bg-slate-200 rounded-3xl p-4 w-1/6'>
 			<div>
 				<Link to='/spaces'>
 					<h1>Spaces</h1>

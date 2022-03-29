@@ -5,6 +5,7 @@ import About from "./components/About"
 import Spaces from "./components/spaces-components/Spaces"
 import Posts from "./components/spaces-components/Posts"
 import Replies from "./components/spaces-components/Replies"
+import NewPost from "./components/spaces-components/NewPost"
 
 function App() {
 	return (
@@ -13,8 +14,11 @@ function App() {
 				<Route path='/' element={<Home />}></Route>
 				<Route path='/about' element={<About />}></Route>
 				<Route path='/spaces' element={<Spaces />}>
-					<Route path=':spaceId' element={<Posts />}>
-						<Route path=':postId' element={<Replies />}></Route>
+					<Route path=':spaceName' element={<Posts />}>
+						<Route path='new' element={<NewPost />}></Route>
+						<Route path=':postId' element={<Replies />}>
+							<Route path='new' element={<NewReply />}></Route>
+						</Route>
 					</Route>
 				</Route>
 			</Routes>
