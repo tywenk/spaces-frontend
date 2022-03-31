@@ -17,8 +17,8 @@ function Navbar() {
 
 	return (
 		<div className='h-screen  '>
-			<div className='h-full w-[12rem] flex flex-col'>
-				<div className='flex flex-col justify-between h-full bg-slate-100 rounded-3xl p-4 m-3 border border-slate-400'>
+			<div className='h-full w-[14rem] flex flex-col'>
+				<div className='flex flex-col justify-between h-full bg-slate-100 rounded-3xl p-4 my-2 mx-3 border border-slate-400'>
 					<div>
 						<Link to='/spaces'>
 							<h1>Spaces</h1>

@@ -2,10 +2,12 @@ import { useState } from "react"
 import { useOutletContext, useNavigate } from "react-router-dom"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
+import { useEthers } from "@usedapp/core"
 
 function NewReply() {
 	const [postId, currPostReplies, setCurrPostReplies] = useOutletContext()
 	const [textContent, setTextContent] = useState("")
+	const { account } = useEthers()
 
 	let navigate = useNavigate()
 
@@ -20,20 +22,26 @@ function NewReply() {
 		})
 			.then((r) => r.json())
 			.then((reply) => {
+				console.log(reply)
 				setCurrPostReplies([...currPostReplies, reply])
 			})
 	}
 
 	const handleSubmit = (e) => {
 		e.preventDefault()
+
+		if (!account) {
+			alert("Please connect wallet to reply")
+			return
+		}
+
 		let content = e.target.content.value
-		//temp user_id
-		let user_id = Math.floor(Math.random() * 10)
+		let user_hash = account
 		let post_id = parseInt(postId)
 
 		let newReplyObj = {
 			content,
-			user_id,
+			user_hash,
 			post_id,
 		}
 
@@ -57,8 +65,15 @@ function NewReply() {
 							className='border border-sky-400'
 						/>
 						<br />
+						{account && (
+							<div className='text-sm text-slate-600'>
+								Posting from {account}
+							</div>
+						)}
+						<br />
 						<div>
 							<h1>Preview</h1>
+
 							<ReactMarkdown
 								children={textContent}
 								remarkPlugins={[remarkGfm]}
@@ -67,6 +82,7 @@ function NewReply() {
 						<br />
 						<input
 							type='submit'
+							value='Reply'
 							className='bg-green-300 text-green-900 rounded-full px-4 py-1 cursor-pointer border border-green-300 hover:border-green-500'
 						/>
 					</form>

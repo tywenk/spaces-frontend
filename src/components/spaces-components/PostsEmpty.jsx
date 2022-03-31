@@ -1,7 +1,7 @@
 function PostsEmpty() {
 	return (
-		<div className='h-screen w-full grid bg-red-400'>
-			<p className=' content-center text-slate-400'>{"Ooooohhhmmm"}</p>
+		<div className='grid place-items-center h-screen grow'>
+			<p className='text-gray-400'>Ooooohmmm</p>
 		</div>
 	)
 }

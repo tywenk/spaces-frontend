@@ -26,7 +26,6 @@ function Posts() {
 
 					//if page is reloaded directly into path of reply
 					if (params.postId) {
-						console.log("params contains post_id")
 						fetch(`http://localhost:9292/posts/${params.postId}`)
 							.then((res) => res.json())
 							.then((post) => {

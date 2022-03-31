@@ -1,18 +1,25 @@
 import { Outlet } from "react-router-dom"
-import { Provider, chain, defaultChains } from "wagmi"
-import { InjectedConnector } from "wagmi/connectors/injected"
 import Navbar from "./Navbar"
+import { DAppProvider, Mainnet } from "@usedapp/core"
 
-// API key for Ethereum node
-// Two popular services are Infura (infura.io) and Alchemy (alchemy.com)
-const infuraId = import.meta.env.INFURA_ID
+const alchemyId = import.meta.env.VITE_ALCHEMY_KEY
+
+const config = {}
+// {
+// 	readOnlyChainId: Mainnet.chainId,
+// 	readOnlyUrls: {
+// 		[Mainnet.chainId]: `https://eth-mainnet.alchemyapi.io/v2/${alchemyId}`,
+// 	},
+// }
 
 function Spaces() {
 	return (
-		<div className='flex flex-row'>
-			<Navbar />
-			<Outlet />
-		</div>
+		<DAppProvider config={config}>
+			<div className='flex flex-row'>
+				<Navbar />
+				<Outlet />
+			</div>
+		</DAppProvider>
 	)
 }
 

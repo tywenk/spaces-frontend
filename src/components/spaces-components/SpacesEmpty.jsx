@@ -1,7 +1,7 @@
 function SpacesEmpty() {
 	return (
-		<div class='grid place-items-center h-screen'>
-			Centered using Tailwind Grid
+		<div className='h-screen w-full grid place-items-center '>
+			<p className='flex align-middle text-slate-400'>{"<-- Enter a space"}</p>
 		</div>
 	)
 }

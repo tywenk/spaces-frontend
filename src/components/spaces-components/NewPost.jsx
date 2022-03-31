@@ -2,6 +2,7 @@ import { useState } from "react"
 import { useOutletContext, useNavigate } from "react-router-dom"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
+import { useEthers } from "@usedapp/core"
 
 function NewPost() {
 	const [
@@ -12,6 +13,7 @@ function NewPost() {
 		posts,
 		setPosts,
 	] = useOutletContext()
+	const { account } = useEthers()
 	const [title, setTitle] = useState("")
 	const [textContent, setTextContent] = useState("")
 
@@ -34,19 +36,26 @@ function NewPost() {
 
 	const handleSubmit = (e) => {
 		e.preventDefault()
+
+		if (!account) {
+			alert("Please connect wallet to post")
+			return
+		}
+
 		let title = e.target.title.value || "Untitled"
 		let content = e.target.content.value
-		//temp user_id
-		let user_id = Math.floor(Math.random() * 10)
+		let user_hash = account
 		let space_name = currSpaceName
 
 		let newPostObj = {
 			title,
 			content,
 			views: 0,
-			user_id,
+			user_hash,
 			space_name,
 		}
+
+		console.log(newPostObj)
 
 		handleAddPost(newPostObj)
 	}
@@ -81,10 +90,20 @@ function NewPost() {
 								className='border border-yellow-100'
 							/>
 							<br />
+							{account && (
+								<div className='text-sm text-slate-600'>
+									Posting from {account}
+								</div>
+							)}
+							<br />
 							<div>
 								<h1>Preview</h1>
-								{textContent && (
+								{(textContent || title) && (
 									<div className='bg-yellow-100 rounded-xl p-2 min-h-fit'>
+										<div className='font-bold'>
+											{title ? title : "Untitled"}
+										</div>
+										<br />
 										<ReactMarkdown
 											children={textContent}
 											remarkPlugins={[remarkGfm]}
@@ -96,6 +115,7 @@ function NewPost() {
 							<br />
 							<input
 								type='submit'
+								value='Post'
 								className='bg-green-300 text-green-900 rounded-full px-4 py-1 cursor-pointer border border-green-300 hover:border-green-500'
 							/>
 						</form>
