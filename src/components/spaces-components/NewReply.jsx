@@ -23,7 +23,7 @@ function NewReply() {
 			.then((r) => r.json())
 			.then((reply) => {
 				console.log(reply)
-				setCurrPostReplies([...currPostReplies, reply])
+				setCurrPostReplies((currPostReplies) => [...currPostReplies, reply])
 			})
 	}
 
@@ -54,6 +54,12 @@ function NewReply() {
 				<div className='flex flex-col gap-1 rounded-md m-4 justify-center'>
 					<h1>New Reply</h1>
 					<br />
+					{account && (
+						<div className='text-sm text-slate-600'>
+							Replying from {account}
+						</div>
+					)}
+					<br />
 					<form onSubmit={handleSubmit}>
 						<textarea
 							id='content'
@@ -62,22 +68,18 @@ function NewReply() {
 							rows='4'
 							cols='50'
 							onChange={(e) => setTextContent(e.target.value)}
-							className='border border-sky-400'
+							className='border border-yellow-500'
 						/>
 						<br />
-						{account && (
-							<div className='text-sm text-slate-600'>
-								Posting from {account}
-							</div>
-						)}
-						<br />
+
 						<div>
 							<h1>Preview</h1>
-
-							<ReactMarkdown
-								children={textContent}
-								remarkPlugins={[remarkGfm]}
-							></ReactMarkdown>
+							<div className='border border-yellow-500 rounded-2xl divide-y items-center m-2 p-2'>
+								<ReactMarkdown
+									children={textContent}
+									remarkPlugins={[remarkGfm]}
+								></ReactMarkdown>
+							</div>
 						</div>
 						<br />
 						<input

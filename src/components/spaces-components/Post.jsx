@@ -16,8 +16,8 @@ function Post({ post, onClickPost }) {
 	return (
 		<div className={css}>
 			<Link to={`${post.id}`} onClick={() => onClickPost(post)}>
-				<div className='grid grid-cols-5 grid-rows-1'>
-					<div className='flex flex-col w-auto h-auto col-span-1 row-span-1'>
+				<div className='grid grid-cols-5 grid-rows-1 divide-x '>
+					<div className='flex flex-col w-auto h-auto col-span-1 mr-1'>
 						{post.user?.shield && (
 							<Shield
 								fieldId={post.user?.shield?.fieldId}
@@ -36,11 +36,15 @@ function Post({ post, onClickPost }) {
 						</div>
 					</div>
 					<div className='col-span-4 row-span-1'>
-						<div>{post.title && <p className='font-bold'>{post.title}</p>}</div>
-						<p className='text-sm text-stone-500'>
-							{dayjs(post.created_at).calendar()}
-						</p>
-						<p>Replies: {post.replies.length}</p>
+						<div className='ml-2'>
+							<div>
+								{post.title && <p className='font-bold'>{post.title}</p>}
+							</div>
+							<p className='text-sm text-stone-500'>
+								{dayjs(post.created_at).calendar()}
+							</p>
+							<p>Replies: {post.replies.length}</p>
+						</div>
 					</div>
 				</div>
 			</Link>

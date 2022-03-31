@@ -6,8 +6,8 @@ import { Shield } from "@areatechnology/shields-react"
 function Reply({ reply }) {
 	return (
 		<div className='bg-yellow-100 rounded-xl p-2 box-border border border-yellow-100 hover:border-yellow-400 border-solid'>
-			<div className='grid grid-cols-5 h-[10rem]'>
-				<div className='col-span-2'>
+			<div className='grid grid-cols-5'>
+				<div className='col-span-1'>
 					<div id='pfp' className=''>
 						{reply.user?.shield && (
 							<Shield
@@ -22,18 +22,22 @@ function Reply({ reply }) {
 								frameId={reply.user?.shield?.frameId}
 							/>
 						)}
-						<p className='font-mono truncate text-sm'>
+						<p className='font-mono truncate text-sm text-slate-500'>
 							{reply.user?.user_hash}
 						</p>
-						<p>{dayjs(reply.created_at).format("MMM D, h:mmA")}</p>
 					</div>
 				</div>
-				<div className='col-span-3'>
-					{reply.title && <p className='font-bold'>{reply.title}</p>}
+				<div className='row-span-5 col-span-4 border border-yellow-500 rounded-2xl divide-y items-center m-2 p-2'>
+					<div className='row-span-1'>
+						{reply.title && <p className='font-bold'>{reply.title}</p>}
+						<p className='text-slate-500 text-sm'>
+							{dayjs(reply.created_at).format("MMM D, h:mmA")}
+						</p>
+					</div>
 					<ReactMarkdown
 						children={reply.content}
 						remarkPlugins={[remarkGfm]}
-						className='truncate w-full'
+						className='truncate w-full row-span-4'
 					></ReactMarkdown>
 				</div>
 			</div>
