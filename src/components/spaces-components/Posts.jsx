@@ -1,17 +1,16 @@
 import { useEffect, useState } from "react"
 import { useParams, useNavigate, Outlet, Link } from "react-router-dom"
-import dayjs from "dayjs"
 import Post from "./Post"
 
 function Posts() {
 	const [posts, setPosts] = useState([])
 	const [currSpaceName, setCurrSpaceName] = useState("")
 	const [currPostReplies, setCurrPostReplies] = useState([])
-	const [currReplyParent, setCurrReplyParent] = useState({})
-	const [filterVal, setFilterVal] = useState("")
+	const [currPost, setCurrPost] = useState({})
+	const [orderVal, setOrderVal] = useState("")
+	const [orderKey, setOrderKey] = useState([])
 
 	let params = useParams()
-	let navigate = useNavigate()
 
 	//useEffects
 	useEffect(() => {
@@ -19,21 +18,72 @@ function Posts() {
 	}, [params])
 
 	useEffect(() => {
-		if (!!currSpaceName) {
+		if (currSpaceName) {
 			fetch(`http://localhost:9292/spaces/posts/${currSpaceName}`)
 				.then((res) => res.json())
-				.then(setPosts)
+				.then((posts) => {
+					setPosts(posts)
+
+					//if page is reloaded directly into path of reply
+					if (params.postId) {
+						console.log("params contains post_id")
+						fetch(`http://localhost:9292/posts/${params.postId}`)
+							.then((res) => res.json())
+							.then((post) => {
+								setCurrPost(post)
+								setCurrPostReplies(post.replies)
+							})
+					}
+				})
 		}
 	}, [currSpaceName])
 
 	//handlers
-	function handleClickPost(post, replies) {
-		setCurrReplyParent(post)
-		setCurrPostReplies(replies)
+	function handleClickPost(post) {
+		setCurrPost(post)
+		setCurrPostReplies(post.replies)
 	}
 
-	function handleFilterChange(e) {
-		setFilterVal(e.target.value)
+	function handleOrderChange(e) {
+		let val = e.target.value
+		setOrderVal(val)
+		let orderKey = []
+		//["prop to compare", bool to reverse or not]
+
+		switch (val) {
+			case "date-desc":
+				orderKey = ["created_at", false]
+				break
+			case "date-asc":
+				orderKey = ["created_at", true]
+				break
+			case "replies-desc":
+				orderKey = ["replies.length", false]
+				break
+			case "replies-asc":
+				orderKey = ["replies.length", true]
+				break
+			default:
+				orderKey = ["created_at", false]
+				break
+		}
+
+		setOrderKey(orderKey)
+	}
+
+	let orderedPosts = posts.sort((a, b) => {
+		let propToCompare = orderKey[0]
+		if (propToCompare == "created_at") {
+			return new Date(b.created_at) - new Date(a.created_at)
+		} else if (propToCompare == "replies.length") {
+			return b.replies.length - a.replies.length
+		} else {
+			return new Date(b.created_at) - new Date(a.created_at)
+		}
+	})
+
+	if (orderKey[1]) {
+		orderedPosts = orderedPosts.reverse()
 	}
 
 	//if no posts, show loading
@@ -41,30 +91,54 @@ function Posts() {
 
 	return (
 		<>
-			<div className='h-screen bg-slate-200 rounded-3xl lg w-1/4 overflow-auto scrollbar-thin scrollbar-thumb-slate-400 scrollbar-track-slate-200 scrollbar-thumb-rounded-full scrollbar-track-rounded-full'>
-				<header className='flex flex-row justify-between p-4'>
-					<div className='flex justify-center'>
-						<Link to='new' className='bg-green-300 rounded-full px-4 py-1'>
-							New Post
-						</Link>
-					</div>
-					<select value={filterVal} onChange={handleFilterChange}>
-						<option value='date-desc'>Date Descending</option>
-						<option value='date-asc'>Date Ascending</option>
-						<option value='replies-desc'>Replies Descending</option>
-						<option value='replies-asc'>Replies Ascending</option>
-					</select>
-				</header>
-
-				<div className='flex flex-col gap-1 bg-slate-200 rounded-md m-2'>
-					{posts.map((post) => (
-						<div key={post.id}>
-							<Post post={post} onClickPost={handleClickPost} />
+			<div className='h-screen'>
+				<div className='h-full flex flex-col w-[26rem]'>
+					<div className='bg-slate-200 rounded-l-3xl my-2 mr-1 border border-slate-400 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-400 scrollbar-thumb-rounded-full scrollbar-track-rounded-full'>
+						<div className='p-4'>
+							<Link to=''>{currSpaceName}</Link>
 						</div>
-					))}
+
+						<header className='flex flex-row justify-between px-4'>
+							<div className='flex justify-center'>
+								<Link
+									to='new'
+									className='bg-green-300 rounded-full px-4 py-1 text-green-900 border border-green-300 hover:border-green-500'
+								>
+									New Post
+								</Link>
+							</div>
+							<select
+								value={orderVal}
+								onChange={handleOrderChange}
+								className='bg-white rounded-xl'
+							>
+								<option value='date-desc'>Recent</option>
+								<option value='date-asc'>Oldest</option>
+								<option value='replies-desc'>Most Replies</option>
+								<option value='replies-asc'>Least Replies</option>
+							</select>
+						</header>
+
+						<div className='flex flex-col gap-1 rounded-md m-2'>
+							{orderedPosts.map((post) => (
+								<div key={post.id}>
+									<Post post={post} onClickPost={handleClickPost} />
+								</div>
+							))}
+						</div>
+					</div>
 				</div>
 			</div>
-			<Outlet context={[currPostReplies, currReplyParent, currSpaceName]} />
+			<Outlet
+				context={[
+					currPostReplies,
+					setCurrPostReplies,
+					currPost,
+					currSpaceName,
+					posts,
+					setPosts,
+				]}
+			/>
 		</>
 	)
 }

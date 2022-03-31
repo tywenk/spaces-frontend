@@ -11,43 +11,43 @@ function Navbar() {
 			.then((data) => setSpaces(data.map((i) => i.space_name)))
 	}, [])
 
+	const passiveState =
+		"border rounded-xl border-slate-300 hover:border-slate-500 border-solid p-1 pl-2"
+	const activeState = "border rounded-xl border-slate-800 border-solid p-1 pl-2"
+
 	return (
-		<nav className='flex flex-col justify-between h-screen bg-slate-200 rounded-3xl p-4 w-1/6'>
-			<div>
-				<Link to='/spaces'>
-					<h1>Spaces</h1>
-				</Link>
-			</div>
-			<div>
-				<div className='flex flex-col'>
-					<NavLink
-						to='all'
-						style={(isActive) => ({
-							color: isActive ? "green" : "blue",
-						})}
-					>
-						all
-					</NavLink>
-					{spaces &&
-						spaces.map((space) => {
-							return (
-								<NavLink
-									key={space}
-									to={space}
-									style={(isActive) => ({
-										color: isActive ? "green" : "blue",
-									})}
-								>
-									{space}
-								</NavLink>
-							)
-						})}
+		<div className='h-screen  '>
+			<div className='h-full w-[12rem] flex flex-col'>
+				<div className='flex flex-col justify-between h-full bg-slate-100 rounded-3xl p-4 m-3 border border-slate-400'>
+					<div>
+						<Link to='/spaces'>
+							<h1>Spaces</h1>
+						</Link>
+					</div>
+					<div>
+						<div className='flex flex-col gap-1'>
+							{spaces &&
+								spaces.map((space) => {
+									return (
+										<NavLink
+											key={space}
+											to={space}
+											className={({ isActive }) =>
+												isActive ? activeState : passiveState
+											}
+										>
+											{space}
+										</NavLink>
+									)
+								})}
+						</div>
+					</div>
+					<div>
+						<ConnectMM />
+					</div>
 				</div>
 			</div>
-			<div>
-				<ConnectMM />
-			</div>
-		</nav>
+		</div>
 	)
 }
 
