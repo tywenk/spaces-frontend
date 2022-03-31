@@ -5,7 +5,6 @@ import Post from "./Post"
 function Posts() {
 	const [posts, setPosts] = useState([])
 	const [currSpaceName, setCurrSpaceName] = useState("")
-	const [currPostReplies, setCurrPostReplies] = useState([])
 	const [currPost, setCurrPost] = useState({})
 	const [orderVal, setOrderVal] = useState("")
 	const [orderKey, setOrderKey] = useState([])
@@ -21,26 +20,13 @@ function Posts() {
 		if (currSpaceName) {
 			fetch(`http://localhost:9292/spaces/posts/${currSpaceName}`)
 				.then((res) => res.json())
-				.then((posts) => {
-					setPosts(posts)
-
-					//if page is reloaded directly into path of reply
-					if (params.postId) {
-						fetch(`http://localhost:9292/posts/${params.postId}`)
-							.then((res) => res.json())
-							.then((post) => {
-								setCurrPost(post)
-								setCurrPostReplies(post.replies)
-							})
-					}
-				})
+				.then(setPosts)
 		}
 	}, [currSpaceName])
 
 	//handlers
 	function handleClickPost(post) {
 		setCurrPost(post)
-		setCurrPostReplies(post.replies)
 	}
 
 	function handleOrderChange(e) {
@@ -66,7 +52,6 @@ function Posts() {
 				orderKey = ["created_at", false]
 				break
 		}
-
 		setOrderKey(orderKey)
 	}
 
@@ -128,16 +113,7 @@ function Posts() {
 					</div>
 				</div>
 			</div>
-			<Outlet
-				context={[
-					currPostReplies,
-					setCurrPostReplies,
-					currPost,
-					currSpaceName,
-					posts,
-					setPosts,
-				]}
-			/>
+			<Outlet context={[currPost, currSpaceName, posts, setPosts]} />
 		</>
 	)
 }
