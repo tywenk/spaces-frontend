@@ -50,7 +50,7 @@ function Replies() {
 	return (
 		<div className='grow h-screen max-w-full'>
 			<div className='h-full flex flex-col '>
-				<div className='flex flex-col gap-1 bg-slate-200 rounded-l-3xl my-2 ml-2 mr-3 border border-slate-400 overflow-auto scrollbar-thin scrollbar-thumb-slate-400'>
+				<div className='flex flex-col gap-1 bg-slate-100 rounded-l-3xl my-2 ml-2 mr-3 border border-slate-400 overflow-auto scrollbar-thin scrollbar-thumb-slate-400 scrollbar-track-slate-100'>
 					<div className='flex flex-col gap-1 rounded-md m-2'>
 						<Reply
 							//this reply is parent post

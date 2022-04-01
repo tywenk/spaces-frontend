@@ -10,8 +10,8 @@ function Post({ post, onClickPost }) {
 
 	let css =
 		params.postId == post.id
-			? "bg-orange-300 rounded-xl p-2 box-border border border-orange-300 hover:border-orange-400 border-solid"
-			: "bg-yellow-100 rounded-xl p-2 box-border border border-yellow-100 hover:border-yellow-400 border-solid"
+			? "bg-orange-200 rounded-xl p-2 box-border border border-orange-500 hover:border-orange-400 border-solid"
+			: "bg-yellow-100 rounded-xl p-2 box-border border border-yellow-500 hover:border-orange-700 border-solid"
 
 	return (
 		<div className={css}>

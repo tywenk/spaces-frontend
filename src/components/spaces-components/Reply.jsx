@@ -10,7 +10,7 @@ dayjs.extend(calendar)
 
 function Reply({ reply, currUserId, onDelete, onEdit }) {
 	return (
-		<div className='bg-yellow-100 rounded-xl p-2 box-border border border-yellow-100 hover:border-yellow-400 border-solid'>
+		<div className='bg-yellow-100 rounded-xl p-2 box-border border border-yellow-500 hover:border-yellow-700 border-solid'>
 			<div className='grid grid-cols-5'>
 				<div className='col-span-1'>
 					<div id='pfp' className=''>
@@ -53,7 +53,7 @@ function Reply({ reply, currUserId, onDelete, onEdit }) {
 									<Link
 										to={`./edit/${reply.id}`}
 										onClick={() => onEdit(reply.content)}
-										className='bg-red-300 text-red-900 rounded-full text-sm px-2 py-0 cursor-pointer border border-red-300 hover:border-red-500'
+										className='bg-slate-300 text-slate-900 rounded-full text-sm px-2 py-0 cursor-pointer border border-slate-300 hover:border-slate-500'
 									>
 										Edit
 									</Link>

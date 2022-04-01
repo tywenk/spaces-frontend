@@ -27,7 +27,7 @@ function ConnectMM({ onNewUser }) {
 
 	return account ? (
 		<div className='w-full'>
-			<div className='bg-slate-300 text-slate-900 rounded-xl px-4 py-1 cursor-pointer w-full border border-slate-300 hover:border-slate-500'>
+			<div className=' text-slate-900 rounded-xl px-4 py-1 cursor-pointer w-full border border-slate-300 hover:border-slate-500'>
 				<div className='truncate text-sm'>Connected as</div>
 				<div className='truncate font-mono'>{account}</div>
 			</div>

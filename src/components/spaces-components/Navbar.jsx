@@ -13,7 +13,8 @@ function Navbar({ onNewUser }) {
 
 	const passiveState =
 		"border rounded-xl border-slate-300 hover:border-slate-500 border-solid p-1 pl-2"
-	const activeState = "border rounded-xl border-slate-800 border-solid p-1 pl-2"
+	const activeState =
+		"bg-orange-200 border rounded-xl border-orange-500 border-solid p-1 pl-2"
 
 	return (
 		<div className='h-screen  '>

@@ -101,7 +101,7 @@ function Posts() {
 		<>
 			<div className='h-screen'>
 				<div className='h-full flex flex-col w-[26rem]'>
-					<div className='bg-slate-200 rounded-l-3xl my-2 mr-1 border border-slate-400 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-400 scrollbar-thumb-rounded-full scrollbar-track-rounded-full'>
+					<div className='bg-slate-100 rounded-l-3xl my-2 mr-1 border border-slate-400 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-400 scrollbar-track-slate-100 scrollbar-thumb-rounded-full scrollbar-track-rounded-full'>
 						<div className='p-4'>
 							<Link to=''>{currSpaceName}</Link>
 						</div>
@@ -118,7 +118,7 @@ function Posts() {
 							<select
 								value={orderVal}
 								onChange={handleOrderChange}
-								className='bg-white rounded-xl'
+								className='bg-slate-300 text-slate-900 rounded-xl cursor-pointer border border-slate-300 hover:border-slate-500'
 							>
 								<option value='date-desc'>Recent</option>
 								<option value='date-asc'>Oldest</option>
