@@ -1,13 +1,15 @@
-import { useState } from "react"
-import { useOutletContext, useNavigate } from "react-router-dom"
+import { useState, useEffect } from "react"
+import { useOutletContext, useNavigate, useParams } from "react-router-dom"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import { useEthers } from "@usedapp/core"
 
-function NewPost() {
+function NewPost({ isEdit }) {
 	const [
 		currUserId,
 		handleDeletePost,
+		postContentEditing,
+		setPostContentEditing,
 		currPost,
 		currSpaceName,
 		posts,
@@ -17,7 +19,15 @@ function NewPost() {
 	const [title, setTitle] = useState("")
 	const [textContent, setTextContent] = useState("")
 
+	let params = useParams()
 	let navigate = useNavigate()
+
+	useEffect(() => {
+		if (postContentEditing && isEdit) {
+			setTitle(postContentEditing.title)
+			setTextContent(postContentEditing.content)
+		}
+	}, [postContentEditing])
 
 	function handleAddPost(newPostObj) {
 		fetch(`http://localhost:9292/posts`, {
@@ -34,7 +44,31 @@ function NewPost() {
 			})
 	}
 
-	const handleSubmit = (e) => {
+	function handleEditPost(id, editedTitleAndContent) {
+		fetch(`http://localhost:9292/posts/${id}`, {
+			method: "PATCH",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(editedTitleAndContent),
+		})
+			.then((res) => res.json())
+			.then((editedPost) => {
+				console.log(editedPost)
+				let newPosts = posts.map((p) => {
+					if (p.id === editedPost.id) {
+						p.content = editedPost.content
+						return p
+					} else {
+						return p
+					}
+				})
+				setPosts(newPosts)
+				navigate(`../${id}`)
+			})
+	}
+
+	function handleSubmit(e) {
 		e.preventDefault()
 
 		if (!account) {
@@ -42,29 +76,40 @@ function NewPost() {
 			return
 		}
 
-		let title = e.target.title.value || "Untitled"
-		let content = e.target.content.value
-		let user_hash = account
-		let space_name = currSpaceName
+		if (!isEdit) {
+			let title = e.target.title.value || "Untitled"
+			let content = e.target.content.value
+			let user_hash = account
+			let space_name = currSpaceName
 
-		let newPostObj = {
-			title,
-			content,
-			views: 0,
-			user_hash,
-			space_name,
+			let newPostObj = {
+				title,
+				content,
+				views: 0,
+				user_hash,
+				space_name,
+			}
+
+			handleAddPost(newPostObj)
 		}
 
-		console.log(newPostObj)
-
-		handleAddPost(newPostObj)
+		if (isEdit) {
+			let title = e.target.title.value || "Untitled"
+			let content = e.target.content.value
+			let id = params.postId
+			handleEditPost(id, { title, content })
+		}
 	}
 
 	return (
 		<div className='h-screen grow'>
 			<div className='h-full flex flex-col'>
 				<div className='bg-slate-200 rounded-l-3xl my-2 mr-3 ml-2 border border-slate-400 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-400 scrollbar-thumb-rounded-full scrollbar-track-rounded-full'>
-					<h1 className='p-4'>Creating new post in {currSpaceName}</h1>
+					{isEdit ? (
+						<h1 className='p-4'>Editing post</h1>
+					) : (
+						<h1 className='p-4'>Creating new post in {currSpaceName}</h1>
+					)}
 					<div className='flex flex-col gap-1 rounded-md m-4 justify-center'>
 						<form onSubmit={handleSubmit}>
 							<label htmlFor='title'>Title:</label>
@@ -115,7 +160,7 @@ function NewPost() {
 							<br />
 							<input
 								type='submit'
-								value='Post'
+								value={isEdit ? "Submit edit" : "Post"}
 								className='bg-green-300 text-green-900 rounded-full px-4 py-1 cursor-pointer border border-green-300 hover:border-green-500'
 							/>
 						</form>

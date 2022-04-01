@@ -5,7 +5,7 @@ import remarkGfm from "remark-gfm"
 import { useEthers } from "@usedapp/core"
 
 function NewReply({ isEdit }) {
-	const [postId, currReplies, setCurrReplies, textContentEditing] =
+	const [postId, currReplies, setCurrReplies, replyContentEditing] =
 		useOutletContext()
 	const [textContent, setTextContent] = useState("")
 	const { account } = useEthers()
@@ -15,8 +15,8 @@ function NewReply({ isEdit }) {
 	console.log(params)
 
 	useEffect(() => {
-		setTextContent(textContentEditing)
-	}, [textContentEditing])
+		setTextContent(replyContentEditing)
+	}, [replyContentEditing])
 
 	function handleAddReply(newReplyObj) {
 		navigate("../")
@@ -80,7 +80,7 @@ function NewReply({ isEdit }) {
 
 		if (isEdit) {
 			let content = e.target.content.value
-			let id = handleEditReply(params.replyId, content)
+			handleEditReply(params.replyId, content)
 		}
 	}
 

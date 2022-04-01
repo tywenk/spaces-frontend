@@ -14,6 +14,7 @@ function Posts() {
 	const [currPost, setCurrPost] = useState({})
 	const [orderVal, setOrderVal] = useState("")
 	const [orderKey, setOrderKey] = useState([])
+	const [postContentEditing, setPostContentEditing] = useState({})
 	const [currUserId] = useOutletContext()
 
 	let params = useParams()
@@ -141,6 +142,8 @@ function Posts() {
 				context={[
 					currUserId,
 					handleDeletePost,
+					postContentEditing,
+					setPostContentEditing,
 					currPost,
 					currSpaceName,
 					posts,

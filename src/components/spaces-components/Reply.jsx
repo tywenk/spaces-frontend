@@ -50,8 +50,15 @@ function Reply({ reply, currUserId, onDelete, onEdit }) {
 										Delete
 									</button>
 									<Link
-										to={`./edit/${reply.id}`}
-										onClick={() => onEdit(reply.content)}
+										to={
+											//if there is a title, then this reply is actually a post
+											reply.title ? `../edit/${reply.id}` : `./edit/${reply.id}`
+										}
+										onClick={() => {
+											reply.title
+												? onEdit({ content: reply.content, title: reply.title })
+												: onEdit(reply.content)
+										}}
 										className='bg-slate-300 text-slate-900 rounded-full text-sm px-2 py-0 cursor-pointer border border-slate-300 hover:border-slate-500'
 									>
 										Edit

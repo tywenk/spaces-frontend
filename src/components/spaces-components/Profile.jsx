@@ -11,16 +11,21 @@ function Profile() {
 		if (account) {
 			fetch(`http://localhost:9292/users/${account}`)
 				.then((res) => res.json())
-				.then(setUser)
+				.then((userData) => {
+					console.log(userData)
+					setUser(userData)
+				})
 		}
 	}, [account])
 
 	return (
-		<div className='h-screen grid place-content-center'>
-			<div>
-				<p>{account && account}</p>
+		<div className='h-screen w-full grid place-content-center'>
+			<div className='rounded-2xl border border-yellow-500 p-5'>
+				<p className='font-mono'>{account && account}</p>
+				<p>Posts: {user.posts?.length}</p>
+				<p>Replies: {user.replies?.length}</p>
 				{user.shield && (
-					<div>
+					<div className='w-100 h-100'>
 						<Shield
 							fieldId={user.shield?.fieldId}
 							colors={[

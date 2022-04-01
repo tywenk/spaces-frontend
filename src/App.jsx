@@ -10,6 +10,7 @@ import SpacesEmpty from "./components/spaces-components/SpacesEmpty"
 import PostsEmpty from "./components/spaces-components/PostsEmpty"
 import EditReply from "./components/spaces-components/EditReply"
 import Profile from "./components/spaces-components/Profile"
+import EditPost from "./components/spaces-components/EditPost"
 
 function App() {
 	return (
@@ -23,6 +24,7 @@ function App() {
 					<Route path=':spaceName' element={<Posts />}>
 						<Route index element={<PostsEmpty />}></Route>
 						<Route path='new' element={<NewPost />}></Route>
+						<Route path='edit/:postId' element={<EditPost />}></Route>
 						<Route path=':postId' element={<Replies />}>
 							<Route path='reply' element={<NewReply />}></Route>
 							<Route path='edit/:replyId' element={<EditReply />}></Route>

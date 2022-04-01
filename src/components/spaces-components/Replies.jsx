@@ -6,8 +6,14 @@ function Replies() {
 	const [postId, setPostId] = useState("")
 	const [currReplies, setCurrReplies] = useState([])
 	const [currPost, setCurrPost] = useState({})
-	const [textContentEditing, setTextContentEditing] = useState("")
-	const [currUserId, handleDeletePost] = useOutletContext()
+	const [replyContentEditing, setReplyContentEditing] = useState("")
+
+	const [
+		currUserId,
+		handleDeletePost,
+		postContentEditing,
+		setPostContentEditing,
+	] = useOutletContext()
 
 	let params = useParams()
 
@@ -56,6 +62,7 @@ function Replies() {
 							//this reply is parent post
 							reply={currPost}
 							currUserId={currUserId}
+							onEdit={setPostContentEditing}
 							onDelete={handleDeletePost}
 						/>
 						{currReplies.length > 0 &&
@@ -64,7 +71,7 @@ function Replies() {
 									key={reply.id}
 									reply={reply}
 									currUserId={currUserId}
-									onEdit={setTextContentEditing}
+									onEdit={setReplyContentEditing}
 									onDelete={handleDeleteReply}
 								/>
 							))}
@@ -81,7 +88,7 @@ function Replies() {
 						</div>
 					)}
 					<Outlet
-						context={[postId, currReplies, setCurrReplies, textContentEditing]}
+						context={[postId, currReplies, setCurrReplies, replyContentEditing]}
 					/>
 				</div>
 			</div>
