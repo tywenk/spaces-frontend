@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom"
 import Navbar from "./Navbar"
 import { DAppProvider, Mainnet } from "@usedapp/core"
 
-const alchemyId = import.meta.env.VITE_ALCHEMY_KEY
+// const alchemyId = import.meta.env.VITE_ALCHEMY_KEY
 
 const config = {}
 // {
@@ -22,7 +22,7 @@ function Spaces() {
 
 	return (
 		<DAppProvider config={config}>
-			<div className='flex flex-row'>
+			<div className='flex flex-row bg-gradient-to-l from-orange-100 '>
 				<Navbar onNewUser={handleGetUserId} />
 				<Outlet context={[currUserId]} />
 			</div>

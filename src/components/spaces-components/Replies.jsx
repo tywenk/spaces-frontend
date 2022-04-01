@@ -6,6 +6,7 @@ function Replies() {
 	const [postId, setPostId] = useState("")
 	const [currReplies, setCurrReplies] = useState([])
 	const [currPost, setCurrPost] = useState({})
+	const [textContentEditing, setTextContentEditing] = useState("")
 	const [currUserId, handleDeletePost] = useOutletContext()
 
 	let params = useParams()
@@ -63,6 +64,7 @@ function Replies() {
 									key={reply.id}
 									reply={reply}
 									currUserId={currUserId}
+									onEdit={setTextContentEditing}
 									onDelete={handleDeleteReply}
 								/>
 							))}
@@ -78,7 +80,9 @@ function Replies() {
 							</Link>
 						</div>
 					)}
-					<Outlet context={[postId, setCurrReplies]} />
+					<Outlet
+						context={[postId, currReplies, setCurrReplies, textContentEditing]}
+					/>
 				</div>
 			</div>
 		</div>

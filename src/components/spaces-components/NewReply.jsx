@@ -1,18 +1,25 @@
-import { useState } from "react"
-import { useOutletContext, useNavigate } from "react-router-dom"
+import { useEffect, useState } from "react"
+import { useOutletContext, useNavigate, useParams } from "react-router-dom"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import { useEthers } from "@usedapp/core"
 
-function NewReply() {
-	const [postId, setCurrReplies] = useOutletContext()
+function NewReply({ isEdit }) {
+	const [postId, currReplies, setCurrReplies, textContentEditing] =
+		useOutletContext()
 	const [textContent, setTextContent] = useState("")
 	const { account } = useEthers()
 
 	let navigate = useNavigate()
+	let params = useParams()
+	console.log(params)
+
+	useEffect(() => {
+		setTextContent(textContentEditing)
+	}, [textContentEditing])
 
 	function handleAddReply(newReplyObj) {
-		navigate(-1)
+		navigate("../")
 		fetch(`http://localhost:9292/replies`, {
 			method: "POST",
 			headers: {
@@ -20,10 +27,32 @@ function NewReply() {
 			},
 			body: JSON.stringify(newReplyObj),
 		})
-			.then((r) => r.json())
+			.then((res) => res.json())
 			.then((reply) => {
-				console.log(reply)
 				setCurrReplies((currentReplies) => [...currentReplies, reply])
+			})
+	}
+
+	function handleEditReply(id, editedContent) {
+		navigate("../")
+		fetch(`http://localhost:9292/replies/${id}`, {
+			method: "PATCH",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ content: editedContent }),
+		})
+			.then((res) => res.json())
+			.then((reply) => {
+				let newReplies = currReplies.map((r) => {
+					if (r.id === reply.id) {
+						r.content = reply.content
+						return r
+					} else {
+						return r
+					}
+				})
+				setCurrReplies(newReplies)
 			})
 	}
 
@@ -35,28 +64,35 @@ function NewReply() {
 			return
 		}
 
-		let content = e.target.content.value
-		let user_hash = account
-		let post_id = parseInt(postId)
+		if (!isEdit) {
+			let content = e.target.content.value
+			let user_hash = account
+			let post_id = parseInt(postId)
 
-		let newReplyObj = {
-			content,
-			user_hash,
-			post_id,
+			let newReplyObj = {
+				content,
+				user_hash,
+				post_id,
+			}
+
+			handleAddReply(newReplyObj)
 		}
 
-		handleAddReply(newReplyObj)
+		if (isEdit) {
+			let content = e.target.content.value
+			let id = handleEditReply(params.replyId, content)
+		}
 	}
 
 	return (
 		<div className='m-2'>
 			<div className="bg-yellow-100 rounded-xl p-2 box-border border-1 border-yellow-100 hover:border-slate-500 border-solid'">
 				<div className='flex flex-col gap-1 rounded-md m-4 justify-center'>
-					<h1>New Reply</h1>
+					<h1>{isEdit ? "Edit Reply" : "New Reply"}</h1>
 					<br />
 					{account && (
 						<div className='text-sm text-slate-600'>
-							Replying from {account}
+							{isEdit ? "Editing" : "Replying"} as {account}
 						</div>
 					)}
 					<br />
@@ -74,17 +110,19 @@ function NewReply() {
 
 						<div>
 							<h1>Preview</h1>
-							<div className='border border-yellow-500 rounded-2xl divide-y items-center m-2 p-2'>
-								<ReactMarkdown
-									children={textContent}
-									remarkPlugins={[remarkGfm]}
-								></ReactMarkdown>
-							</div>
+							{textContent && (
+								<div className='border border-yellow-500 rounded-2xl divide-y items-center m-2 p-2'>
+									<ReactMarkdown
+										children={textContent}
+										remarkPlugins={[remarkGfm]}
+									></ReactMarkdown>
+								</div>
+							)}
 						</div>
 						<br />
 						<input
 							type='submit'
-							value='Reply'
+							value={isEdit ? "Submit edit" : "Reply"}
 							className='bg-green-300 text-green-900 rounded-full px-4 py-1 cursor-pointer border border-green-300 hover:border-green-500'
 						/>
 					</form>

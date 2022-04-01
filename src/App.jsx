@@ -8,6 +8,7 @@ import NewPost from "./components/spaces-components/NewPost"
 import NewReply from "./components/spaces-components/NewReply"
 import SpacesEmpty from "./components/spaces-components/SpacesEmpty"
 import PostsEmpty from "./components/spaces-components/PostsEmpty"
+import EditReply from "./components/spaces-components/EditReply"
 
 function App() {
 	return (
@@ -22,6 +23,7 @@ function App() {
 						<Route path='new' element={<NewPost />}></Route>
 						<Route path=':postId' element={<Replies />}>
 							<Route path='reply' element={<NewReply />}></Route>
+							<Route path='edit/:replyId' element={<EditReply />}></Route>
 						</Route>
 					</Route>
 				</Route>

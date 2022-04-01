@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react"
-import { useParams, Outlet, Link, useOutletContext } from "react-router-dom"
+import {
+	useParams,
+	Outlet,
+	Link,
+	useOutletContext,
+	useNavigate,
+} from "react-router-dom"
 import Post from "./Post"
 
 function Posts() {
@@ -8,9 +14,10 @@ function Posts() {
 	const [currPost, setCurrPost] = useState({})
 	const [orderVal, setOrderVal] = useState("")
 	const [orderKey, setOrderKey] = useState([])
+	const [currUserId] = useOutletContext()
 
 	let params = useParams()
-	const [currUserId] = useOutletContext()
+	let navigate = useNavigate()
 
 	//useEffects
 	useEffect(() => {
@@ -42,6 +49,7 @@ function Posts() {
 				let newPosts = posts.filter((post) => post.id !== deletedPost.id)
 				setPosts(newPosts)
 				setCurrPost({})
+				navigate("./")
 			})
 	}
 
