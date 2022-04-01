@@ -5,7 +5,14 @@ import remarkGfm from "remark-gfm"
 import { useEthers } from "@usedapp/core"
 
 function NewPost() {
-	const [currPost, currSpaceName, posts, setPosts] = useOutletContext()
+	const [
+		currUserId,
+		handleDeletePost,
+		currPost,
+		currSpaceName,
+		posts,
+		setPosts,
+	] = useOutletContext()
 	const { account } = useEthers()
 	const [title, setTitle] = useState("")
 	const [textContent, setTextContent] = useState("")

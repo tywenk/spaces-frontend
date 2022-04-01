@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import { NavLink, Link } from "react-router-dom"
 import ConnectMM from "../ConnectMM"
 
-function Navbar() {
+function Navbar({ onNewUser }) {
 	const [spaces, setSpaces] = useState([])
 
 	useEffect(() => {
@@ -43,7 +43,7 @@ function Navbar() {
 						</div>
 					</div>
 					<div>
-						<ConnectMM />
+						<ConnectMM onNewUser={onNewUser} />
 					</div>
 				</div>
 			</div>

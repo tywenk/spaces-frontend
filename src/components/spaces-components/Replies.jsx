@@ -6,7 +6,7 @@ function Replies() {
 	const [postId, setPostId] = useState("")
 	const [currReplies, setCurrReplies] = useState([])
 	const [currPost, setCurrPost] = useState({})
-	const [currSpaceName] = useOutletContext()
+	const [currUserId, handleDeletePost] = useOutletContext()
 
 	let params = useParams()
 
@@ -20,27 +20,51 @@ function Replies() {
 				.then((res) => res.json())
 				.then((data) => {
 					setCurrReplies(data)
-					// console.log(data)
 				})
 
 			fetch(`http://localhost:9292/posts/${postId}`)
 				.then((res) => res.json())
 				.then((data) => {
 					setCurrPost(data)
-					// console.log(data)
 				})
 		}
 	}, [postId])
+
+	function handleDeleteReply(id) {
+		fetch(`http://localhost:9292/replies/${id}`, {
+			method: "DELETE",
+			headers: {
+				"Content-Type": "application/json",
+			},
+		})
+			.then((r) => r.json())
+			.then((deletedReply) => {
+				let newReplies = currReplies.filter(
+					(reply) => reply.id !== deletedReply.id
+				)
+				setCurrReplies(newReplies)
+			})
+	}
 
 	return (
 		<div className='grow h-screen max-w-full'>
 			<div className='h-full flex flex-col '>
 				<div className='flex flex-col gap-1 bg-slate-200 rounded-l-3xl my-2 ml-2 mr-3 border border-slate-400 overflow-auto scrollbar-thin scrollbar-thumb-slate-400'>
 					<div className='flex flex-col gap-1 rounded-md m-2'>
-						<Reply reply={currPost} />
+						<Reply
+							//this reply is parent post
+							reply={currPost}
+							currUserId={currUserId}
+							onDelete={handleDeletePost}
+						/>
 						{currReplies.length > 0 &&
 							currReplies.map((reply) => (
-								<Reply key={reply.id} reply={reply} />
+								<Reply
+									key={reply.id}
+									reply={reply}
+									currUserId={currUserId}
+									onDelete={handleDeleteReply}
+								/>
 							))}
 					</div>
 
@@ -54,7 +78,7 @@ function Replies() {
 							</Link>
 						</div>
 					)}
-					<Outlet context={[postId, currReplies, setCurrReplies]} />
+					<Outlet context={[postId, setCurrReplies]} />
 				</div>
 			</div>
 		</div>

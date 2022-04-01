@@ -5,7 +5,7 @@ import remarkGfm from "remark-gfm"
 import { useEthers } from "@usedapp/core"
 
 function NewReply() {
-	const [postId, currReplies, setCurrReplies] = useOutletContext()
+	const [postId, setCurrReplies] = useOutletContext()
 	const [textContent, setTextContent] = useState("")
 	const { account } = useEthers()
 
@@ -23,7 +23,7 @@ function NewReply() {
 			.then((r) => r.json())
 			.then((reply) => {
 				console.log(reply)
-				setCurrReplies((currReplies) => [...currReplies, reply])
+				setCurrReplies((currentReplies) => [...currentReplies, reply])
 			})
 	}
 

@@ -3,7 +3,7 @@ import remarkGfm from "remark-gfm"
 import dayjs from "dayjs"
 import { Shield } from "@areatechnology/shields-react"
 
-function Reply({ reply }) {
+function Reply({ reply, currUserId, onDelete }) {
 	return (
 		<div className='bg-yellow-100 rounded-xl p-2 box-border border border-yellow-100 hover:border-yellow-400 border-solid'>
 			<div className='grid grid-cols-5'>
@@ -28,11 +28,28 @@ function Reply({ reply }) {
 					</div>
 				</div>
 				<div className='row-span-5 col-span-4 border border-yellow-500 rounded-2xl divide-y items-center m-2 p-2'>
-					<div className='row-span-1'>
-						{reply.title && <p className='font-bold'>{reply.title}</p>}
-						<p className='text-slate-500 text-sm'>
-							{dayjs(reply.created_at).format("MMM D, h:mmA")}
-						</p>
+					<div className='row-span-1 flex flex-row justify-between mb-1'>
+						<div>
+							{reply.title && <p className='font-bold'>{reply.title}</p>}
+							<p className='text-slate-500 text-sm'>
+								{dayjs(reply.created_at).format("MMM D, h:mmA")}
+							</p>
+						</div>
+						<div>
+							{currUserId == reply.user?.id && (
+								<>
+									<button
+										onClick={() => onDelete(reply.id)}
+										className='bg-red-300 text-red-900 rounded-full text-sm px-2 mx-1 py-0 cursor-pointer border border-red-300 hover:border-red-500'
+									>
+										Delete
+									</button>
+									<button className='bg-red-300 text-red-900 rounded-full text-sm px-2 py-0 cursor-pointer border border-red-300 hover:border-red-500'>
+										Edit
+									</button>
+								</>
+							)}
+						</div>
 					</div>
 					<ReactMarkdown
 						children={reply.content}

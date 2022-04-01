@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useParams, useNavigate, Outlet, Link } from "react-router-dom"
+import { useParams, Outlet, Link, useOutletContext } from "react-router-dom"
 import Post from "./Post"
 
 function Posts() {
@@ -10,6 +10,7 @@ function Posts() {
 	const [orderKey, setOrderKey] = useState([])
 
 	let params = useParams()
+	const [currUserId] = useOutletContext()
 
 	//useEffects
 	useEffect(() => {
@@ -27,6 +28,21 @@ function Posts() {
 	//handlers
 	function handleClickPost(post) {
 		setCurrPost(post)
+	}
+
+	function handleDeletePost(id) {
+		fetch(`http://localhost:9292/posts/${id}`, {
+			method: "DELETE",
+			headers: {
+				"Content-Type": "application/json",
+			},
+		})
+			.then((res) => res.json())
+			.then((deletedPost) => {
+				let newPosts = posts.filter((post) => post.id !== deletedPost.id)
+				setPosts(newPosts)
+				setCurrPost({})
+			})
 	}
 
 	function handleOrderChange(e) {
@@ -113,7 +129,16 @@ function Posts() {
 					</div>
 				</div>
 			</div>
-			<Outlet context={[currPost, currSpaceName, posts, setPosts]} />
+			<Outlet
+				context={[
+					currUserId,
+					handleDeletePost,
+					currPost,
+					currSpaceName,
+					posts,
+					setPosts,
+				]}
+			/>
 		</>
 	)
 }

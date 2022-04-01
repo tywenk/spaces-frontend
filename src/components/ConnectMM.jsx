@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import { useEthers } from "@usedapp/core"
 
-function ConnectMM() {
+function ConnectMM({ onNewUser }) {
 	const { activateBrowserWallet, deactivate, account } = useEthers()
 
 	function handleConnectWallet() {
@@ -19,11 +19,8 @@ function ConnectMM() {
 			})
 				.then((r) => r.json())
 				.then((data) => {
-					if (data) {
-						console.log("Made user and shield: ", data)
-					} else {
-						console.log("User already exists in db")
-					}
+					console.log("User and shield: ", data)
+					onNewUser(data.user_id)
 				})
 		}
 	}, [account])
