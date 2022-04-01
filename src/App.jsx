@@ -9,6 +9,7 @@ import NewReply from "./components/spaces-components/NewReply"
 import SpacesEmpty from "./components/spaces-components/SpacesEmpty"
 import PostsEmpty from "./components/spaces-components/PostsEmpty"
 import EditReply from "./components/spaces-components/EditReply"
+import Profile from "./components/spaces-components/Profile"
 
 function App() {
 	return (
@@ -18,6 +19,7 @@ function App() {
 				<Route path='/about' element={<About />}></Route>
 				<Route path='/spaces' element={<Spaces />}>
 					<Route index element={<SpacesEmpty />}></Route>
+					<Route path='profile' element={<Profile />}></Route>
 					<Route path=':spaceName' element={<Posts />}>
 						<Route index element={<PostsEmpty />}></Route>
 						<Route path='new' element={<NewPost />}></Route>

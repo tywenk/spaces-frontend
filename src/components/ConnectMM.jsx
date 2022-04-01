@@ -1,5 +1,6 @@
 import { useEffect } from "react"
 import { useEthers } from "@usedapp/core"
+import { Link } from "react-router-dom"
 
 function ConnectMM({ onNewUser }) {
 	const { activateBrowserWallet, deactivate, account } = useEthers()
@@ -19,7 +20,6 @@ function ConnectMM({ onNewUser }) {
 			})
 				.then((r) => r.json())
 				.then((data) => {
-					console.log("User and shield: ", data)
 					onNewUser(data.user_id)
 				})
 		}
@@ -28,8 +28,10 @@ function ConnectMM({ onNewUser }) {
 	return account ? (
 		<div className='w-full'>
 			<div className=' text-slate-900 rounded-xl px-4 py-1 cursor-pointer w-full border border-slate-300 hover:border-slate-500'>
-				<div className='truncate text-sm'>Connected as</div>
-				<div className='truncate font-mono'>{account}</div>
+				<Link to='./profile'>
+					<div className='truncate text-sm'>Connected as</div>
+					<div className='truncate font-mono'>{account}</div>
+				</Link>
 			</div>
 			<div
 				className='truncate cursor-pointer text-sm bg-red-300 text-red-800 rounded-xl px-4 py-0 mt-1 border border-red-300 hover:border-red-500'
